@@ -1,3 +1,4 @@
+package progra_cliente.model;
 
 import javax.swing.*;
 import java.net.*;
