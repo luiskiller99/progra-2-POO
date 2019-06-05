@@ -30,14 +30,17 @@ public class ControladorInicioServer implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
     }    
 
     @FXML
     private void abrirVentanaAniadirCandidato(ActionEvent event) {
+        
     }
 
     @FXML
-    private void abrirVentanaVotacion(ActionEvent event) {
+    private void abrirVentanaServidorIniciado(ActionEvent event) {
+        
     }
     
 }
