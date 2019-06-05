@@ -11,18 +11,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  *
  * @author irsac
  */
-public class ControladorInicioServer implements Initializable {
+public class ControladorVentanaAniadirCandidatos implements Initializable {
 
+    @FXML
+    private TextField textNombreCandidato;
+    @FXML
+    private TextField textPartidoPolitico;
+    @FXML
+    private TextField textCedula;
     @FXML
     private Button botonAniadirCandidato;
     @FXML
-    private Button botonIniciarVotacion;
+    private Button botonCerrarVentana;
 
     /**
      * Initializes the controller class.
@@ -33,11 +40,11 @@ public class ControladorInicioServer implements Initializable {
     }    
 
     @FXML
-    private void abrirVentanaAniadirCandidato(ActionEvent event) {
+    private void agregarCandidato(ActionEvent event) {
     }
 
     @FXML
-    private void abrirVentanaVotacion(ActionEvent event) {
+    private void cerrarVentana(ActionEvent event) {
     }
     
 }

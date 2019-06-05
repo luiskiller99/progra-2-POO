@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="256.0" prefWidth="367.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="progra_servidor.controller.ControladorVentanaAniadirCandidatos">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Añadir Candidato">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="61.0" text="Nombre del Candidato:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="43.0" layoutY="107.0" text="Partido Politico:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="75.0" layoutY="147.0" text="Cedula:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="textNombreCandidato" layoutX="197.0" layoutY="61.0" prefHeight="26.0" prefWidth="154.0" promptText="Nombre Apellido Apellido" />
+      <TextField fx:id="textPartidoPolitico" layoutX="197.0" layoutY="107.0" prefHeight="26.0" prefWidth="154.0" promptText="Partido Politico" />
+      <TextField fx:id="textCedula" layoutX="199.0" layoutY="147.0" prefHeight="26.0" prefWidth="154.0" promptText="0-0000-0000" />
+      <Button fx:id="botonAniadirCandidato" layoutX="66.0" layoutY="206.0" mnemonicParsing="false" onAction="#agregarCandidato" text="Añadir">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="botonCerrarVentana" layoutX="214.0" layoutY="206.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cerrar Ventana">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
