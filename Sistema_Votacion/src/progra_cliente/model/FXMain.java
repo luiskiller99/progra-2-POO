@@ -1,30 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package progra_cliente.model;
-
 import java.io.IOException;
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 /**
- *
  * @author metal
  */
 public class FXMain extends Application {   
     @Override
     public void start(Stage primaryStage) {        
-        Parent root1;
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("venatana_inicio.fxml"));        
-            root1 = fxmlLoader.load();                                    
+        try{                    
+            URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
+            FXMLLoader fxmlloader = new FXMLLoader(fxml);
             primaryStage.setTitle("Sistema de votación");
-            primaryStage.setScene(new Scene(root1));  
+            primaryStage.setScene(new Scene(fxmlloader.load()));  
             primaryStage.show();  
         }catch(IOException e){}                               
     }  
