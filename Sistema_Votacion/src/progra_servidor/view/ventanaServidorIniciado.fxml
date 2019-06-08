@@ -13,6 +13,6 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="72.0" layoutY="104.0" mnemonicParsing="false" text="Finalizar Votacion" />
+      <Button fx:id="botonTerminarVotacion" layoutX="72.0" layoutY="104.0" mnemonicParsing="false" onAction="#finalizarVotacion" text="Finalizar Votacion" />
    </children>
 </AnchorPane>

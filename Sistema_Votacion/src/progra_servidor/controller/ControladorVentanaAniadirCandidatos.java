@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -41,10 +42,16 @@ public class ControladorVentanaAniadirCandidatos implements Initializable {
 
     @FXML
     private void agregarCandidato(ActionEvent event) {
+        textNombreCandidato.clear();
+        textPartidoPolitico.clear();
+        textCedula.clear();
+        //crear candidato y añadirlo a una lista
     }
 
     @FXML
     private void cerrarVentana(ActionEvent event) {
+        Stage stagg = (Stage) botonCerrarVentana.getScene().getWindow();
+	stagg.close();
     }
     
 }

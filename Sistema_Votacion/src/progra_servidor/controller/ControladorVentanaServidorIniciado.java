@@ -7,7 +7,11 @@ package progra_servidor.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -16,6 +20,9 @@ import javafx.fxml.Initializable;
  */
 public class ControladorVentanaServidorIniciado implements Initializable {
 
+    @FXML
+    private Button botonTerminarVotacion;
+
     /**
      * Initializes the controller class.
      */
@@ -23,5 +30,20 @@ public class ControladorVentanaServidorIniciado implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void finalizarVotacion(ActionEvent event) {
+        Stage stagg = (Stage) botonTerminarVotacion.getScene().getWindow();
+	stagg.close();
+        /*try {
+		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaAniadirCandidatos.fxml"));
+		Parent root = (Parent) fxmlLoader.load();
+		Stage stage = new Stage();
+		stage.setScene(new Scene(root));
+		stage.show();
+	} catch (IOException e) {
+                    
+	}*/
+    }
     
 }
