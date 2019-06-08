@@ -8,7 +8,11 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import com.sun.mail.util.BASE64DecoderStream;
 import com.sun.mail.util.BASE64EncoderStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
@@ -37,9 +41,16 @@ public class Encriptador {
 	}
 
 	private static void initKey() throws NoSuchAlgorithmException {
-		key = ObjectLoaderAndSaver.cargarObjeto("key.sk", SecretKey.class);
-		if (key == null)
+		try {
+			key = ConversorDeObjetos.convertirAObjeto(new Scanner(new File("key.sk"))
+				.useDelimiter("\\A").next(), SecretKey.class);
+		} catch (IOException ex) {
 			key = KeyGenerator.getInstance("DES").generateKey();
+			try (FileWriter f = new FileWriter("key.sk")) {
+				f.write(ConversorDeObjetos.convertirAJsonString(key));
+			} catch (Exception ex1) {
+			}
+		}
 	}
 
 	public static String encrypt(String str) {
@@ -47,6 +58,9 @@ public class Encriptador {
 			return new String(BASE64EncoderStream.encode(ecipher.doFinal(str.getBytes("UTF8"))));
 		} catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
 			System.out.println("Error: " + e.getMessage());
+		} catch (NullPointerException e) {
+			initialize();
+			return encrypt(str);
 		}
 		return null;
 	}
@@ -56,7 +70,15 @@ public class Encriptador {
 			return new String(dcipher.doFinal(BASE64DecoderStream.decode(str.getBytes())), "UTF8");
 		} catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException e) {
 			System.out.println("Error: " + e.getMessage());
+		} catch (NullPointerException e) {
+			initialize();
+			return decrypt(str);
 		}
 		return null;
+	}
+
+	public static void main(String[] args) {
+		String s = encrypt(encrypt(encrypt(encrypt(encrypt("@ñó ◙m╚█¼")))));
+		System.out.println("s");
 	}
 }
