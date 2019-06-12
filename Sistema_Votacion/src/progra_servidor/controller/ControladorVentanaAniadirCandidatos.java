@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import progra_servidor.model.SistemaServidor;
 
 /**
  * FXML Controller class
@@ -42,6 +43,7 @@ public class ControladorVentanaAniadirCandidatos implements Initializable {
 
     @FXML
     private void agregarCandidato(ActionEvent event) {
+        SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), Integer.parseInt(textCedula.getText()));
         textNombreCandidato.clear();
         textPartidoPolitico.clear();
         textCedula.clear();

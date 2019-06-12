@@ -7,11 +7,14 @@ package progra_servidor.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import progra_servidor.model.SistemaServidor;
 
 /**
  * FXML Controller class
@@ -34,15 +37,12 @@ public class ControladorVentanaServidorIniciado implements Initializable {
 	@FXML
 	private void finalizarVotacion(ActionEvent event) {
 		((Stage) botonTerminarVotacion.getScene().getWindow()).close();
-		/*try {
-		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaAniadirCandidatos.fxml"));
-		Parent root = (Parent) fxmlLoader.load();
-		Stage stage = new Stage();
-		stage.setScene(new Scene(root));
-		stage.show();
-	} catch (IOException e) {
-                    
-	}*/
+                SistemaServidor.cerrarServidor();
+            try {
+                SistemaServidor.inicializarConteoDeVotos();
+            } catch (Exception ex) {
+                Logger.getLogger(ControladorVentanaServidorIniciado.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 }
