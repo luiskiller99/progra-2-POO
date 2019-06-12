@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import progra_servidor.model.SistemaServidor;
 
 /**
@@ -22,38 +23,42 @@ import progra_servidor.model.SistemaServidor;
  */
 public class ControladorVentanaAniadirCandidatos implements Initializable {
 
-    @FXML
-    private TextField textNombreCandidato;
-    @FXML
-    private TextField textPartidoPolitico;
-    @FXML
-    private TextField textCedula;
-    @FXML
-    private Button botonAniadirCandidato;
-    @FXML
-    private Button botonCerrarVentana;
+	@FXML
+	private TextField textNombreCandidato;
+	@FXML
+	private TextField textPartidoPolitico;
+	@FXML
+	private TextField textCedula;
+	@FXML
+	private Button botonAniadirCandidato;
+	@FXML
+	private Button botonCerrarVentana;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+	/**
+	 * Initializes the controller class.
+	 */
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		// TODO
+	}
 
-    @FXML
-    private void agregarCandidato(ActionEvent event) {
-        SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), Integer.parseInt(textCedula.getText()));
-        textNombreCandidato.clear();
-        textPartidoPolitico.clear();
-        textCedula.clear();
-        //crear candidato y añadirlo a una lista
-    }
+	@FXML
+	private void agregarCandidato(ActionEvent event) {
+		try {
+			SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), Integer.parseInt(textCedula.getText()));
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", 0);
+		}
+		textNombreCandidato.clear();
+		textPartidoPolitico.clear();
+		textCedula.clear();
+		//crear candidato y añadirlo a una lista
+	}
 
-    @FXML
-    private void cerrarVentana(ActionEvent event) {
-        Stage stagg = (Stage) botonCerrarVentana.getScene().getWindow();
-	stagg.close();
-    }
-    
+	@FXML
+	private void cerrarVentana(ActionEvent event) {
+		Stage stagg = (Stage) botonCerrarVentana.getScene().getWindow();
+		stagg.close();
+	}
+
 }
