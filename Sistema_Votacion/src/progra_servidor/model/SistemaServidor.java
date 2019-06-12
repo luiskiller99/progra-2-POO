@@ -28,7 +28,7 @@ public class SistemaServidor {
 	private static Stv stv;
 
 	public static void iniciarServidor() {
-		servidor = new Servidor(5000);
+		//servidor = new Servidor(5000);
 	}
 
 	public static boolean haySuficientesCandidatosRegistrados() {
@@ -61,7 +61,7 @@ public class SistemaServidor {
 	}
 
 	public static void cerrarServidor() {
-		servidor.cerrar_connecion();
+		servidor.cerrar_conección();
 	}
 
 	public static void mostrarResultadoDeLaVotacion(String tipoGrafico) {

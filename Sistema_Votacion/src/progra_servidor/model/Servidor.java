@@ -1,87 +1,58 @@
 package progra_servidor.model;
-
-import jdk.nashorn.internal.ir.WhileNode;
-
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-
-public class Servidor extends Thread {
-
-	private String mensaje = "";
-	private ServerSocket server;
-	private Socket socket = null;
-	private DataOutputStream out;
-	DataInputStream in;
-	private int puerto = 5000;
-	String Nombre_Cliente = "";
-	String en_orden = "";
-
-	public Servidor(int pue) {
-		puerto = pue;
-	}
-
-	@Override
-	public void run() {
+import progra_cliente.model.Renglon_votacion;
+public class Servidor extends Thread {	
+	private ServerSocket server;	
+        private Socket socket;
+	private int port = 5000;
+	public Servidor() {}
+        @Override
+	public void run() {            
+                try {
+                    server = new ServerSocket(port);
+                    socket = server.accept();
+                } catch (ConnectException e) {System.out.println("error conección");
+		} catch (IOException e) {System.out.println("error");}
+                //leer_votos();          
+                ArrayList<Renglon_votacion> v = new ArrayList<Renglon_votacion>();
+                v.add(new Renglon_votacion("luis",3));
+                enviar_candidatos(v);
+        }                        
+        public void enviar_candidatos(ArrayList<Renglon_votacion> v){            
+            try{
+                ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
+                objectOutput.writeObject(v); 
+                System.out.println("envio datos con exito");
+            } catch (IOException e){e.printStackTrace();}
+        }
+        public ArrayList<Renglon_votacion> leer_votos(){
+           ArrayList<Renglon_votacion> titleList = new ArrayList<Renglon_votacion>();
+           try {
+               while(true){
+                    ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
+                    try {
+                        Object object = objectInput.readObject();
+                        titleList =  (ArrayList<Renglon_votacion>) object;
+                        System.out.println(titleList.get(0).getNombre_de_candidato());
+                    } catch (ClassNotFoundException e) {
+                        System.out.println("The title list has not come from the server");
+                        e.printStackTrace();
+                    }
+               }
+           } catch (IOException e) {
+               System.out.println("The socket for reading the object has problem");
+               e.printStackTrace();
+           }
+           return titleList;
+        }
+        public void cerrar_conección() {
 		try {
-			server = new ServerSocket(puerto);
-			/**
-			 * espera a que se conecte
-			 */
-			socket = server.accept();
-			System.out.println("Conectado");
-			/**
-			 * leer mensaje
-			 */
-			in = new DataInputStream(socket.getInputStream());
-			Nombre_Cliente = in.readUTF();
-			System.out.println("Nombre de cliente: " + Nombre_Cliente);
-			en_orden = in.readUTF();
-			System.out.println("Quiere orden de entrada: " + en_orden);
-		} catch (IOException e) {
-			System.out.println("Error, no conectado");
-		}
-	}
-
-	public void send_mesagge(String holi) {
-		try {
-			mensaje = holi;
-			out = new DataOutputStream(socket.getOutputStream());
-			out.writeUTF(mensaje);
-		} catch (IOException E) {
-			System.out.println("Error, reconectar");
-		}
-	}
-
-	public void reconectar() {
-		try {
-			//server = new ServerSocket(puerto);
-			/**
-			 * espera a que se conecte
-			 */
-			System.out.println("Esperando conección de cliente");
-			socket = server.accept();
-			System.out.println("Conectado");
-			/**
-			 * leer mensaje
-			 */
-			in = new DataInputStream(socket.getInputStream());
-			Nombre_Cliente = in.readUTF();
-			System.out.println("Nombre de cliente: " + Nombre_Cliente);
-			en_orden = in.readUTF();
-			System.out.println("Quiere orden de entrada: " + en_orden);
-		} catch (IOException e) {
-			System.out.println("Error, no conectado");
-		}
-	}
-
-	public void cerrar_connecion() {
-		try {
-			socket.close();
-			socket = null;
-			System.out.println("Conección cerrada");
+                    socket.close();
+                    System.out.println("Conección cerrada");
 		} catch (IOException R) {
-			System.out.println("Error al cerrar conección");
+                    System.out.println("Error al cerrar conección");
 		}
 	}
 }
