@@ -56,7 +56,7 @@ public class Controller_votacion implements Initializable {
             }
             if(cont>1){
                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tiene selecciones iguales en dos o mas candidatos, corríjalas", ButtonType.OK);
-                 //alert.show();
+                 alert.show();
             }else{
                 //enviar voto
             }            
