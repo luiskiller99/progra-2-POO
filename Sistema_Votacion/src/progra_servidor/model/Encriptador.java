@@ -77,8 +77,4 @@ public class Encriptador {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		String s = encrypt(encrypt(encrypt(encrypt(encrypt("@ñó ◙m╚█¼")))));
-		System.out.println("s");
-	}
 }

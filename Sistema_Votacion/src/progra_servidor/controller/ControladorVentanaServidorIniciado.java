@@ -20,22 +20,21 @@ import javafx.stage.Stage;
  */
 public class ControladorVentanaServidorIniciado implements Initializable {
 
-    @FXML
-    private Button botonTerminarVotacion;
+	@FXML
+	private Button botonTerminarVotacion;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+	/**
+	 * Initializes the controller class.
+	 */
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		// TODO
+	}
 
-    @FXML
-    private void finalizarVotacion(ActionEvent event) {
-        Stage stagg = (Stage) botonTerminarVotacion.getScene().getWindow();
-	stagg.close();
-        /*try {
+	@FXML
+	private void finalizarVotacion(ActionEvent event) {
+		((Stage) botonTerminarVotacion.getScene().getWindow()).close();
+		/*try {
 		FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaAniadirCandidatos.fxml"));
 		Parent root = (Parent) fxmlLoader.load();
 		Stage stage = new Stage();
@@ -44,6 +43,6 @@ public class ControladorVentanaServidorIniciado implements Initializable {
 	} catch (IOException e) {
                     
 	}*/
-    }
-    
+	}
+
 }
