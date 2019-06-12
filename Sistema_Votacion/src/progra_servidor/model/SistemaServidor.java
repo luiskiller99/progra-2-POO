@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
+import javax.swing.JOptionPane;
 import progra_servidor.controller.ControladorDeGrafico;
 
 /**
@@ -35,8 +35,11 @@ public class SistemaServidor {
 		return candidatos.size() >= 5 * 2 + 1;
 	}
 
-	public static void aniadirCandidato(String nombre, String partido, int cedula) {
-		candidatos.add(new Candidato(nombre, partido, cedula));
+	public static void aniadirCandidato(String nombre, String partido, int cedula) throws Exception {
+		if (candidatos.stream().anyMatch((candidato) -> candidato.getCedula() == cedula))
+			throw new Exception("Ya existe un candidato con ese número de cédula.");
+		else
+			candidatos.add(new Candidato(nombre, partido, cedula));
 	}
 
 	public static void guardarVoto(Voto voto) {
@@ -80,7 +83,7 @@ public class SistemaServidor {
 
 	private static void actualizarGrafico(ControladorDeGrafico grafico, boolean flag) {
 		if (stv.plazasLlenadas())
-			new Alert(Alert.AlertType.INFORMATION, "Se ha terminado de evaluar los votos.").showAndWait();
+			JOptionPane.showMessageDialog(grafico.getV().getChartPanel(), "Se ha terminado de evaluar los votos.", "Resultado de votación", JOptionPane.INFORMATION_MESSAGE);
 		else {
 			if (flag)
 				stv.eliminarPartidoConMenosVotos();
@@ -117,7 +120,7 @@ public class SistemaServidor {
 		}
 		try {
 			stv = new Stv(votos, 5);
-			mostrarResultadoDeLaVotacion("barras");
+			mostrarResultadoDeLaVotacion("pizza");
 		} catch (Exception ex) {
 			Logger.getLogger(SistemaServidor.class.getName()).log(Level.SEVERE, null, ex);
 		}

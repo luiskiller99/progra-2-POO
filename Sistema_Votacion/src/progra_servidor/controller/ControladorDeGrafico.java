@@ -25,40 +25,42 @@ public class ControladorDeGrafico {
 	DefaultCategoryDataset dataset;
 	ChartFrame v;
 	String categoria;
-	Map<Integer, ArrayList<Voto>> valoresEnGrafico;
 
 	public ControladorDeGrafico(Map<Integer, ArrayList<Voto>> valores, String labelCategoria) {
 		dataset = new DefaultCategoryDataset();
 		categoria = labelCategoria;
-		valoresEnGrafico = valores;
 		valores.forEach((candidato, valor) -> {
-			dataset.setValue(valor.size(), candidato, candidato);
+			dataset.setValue(valor.size(), candidato, "Candidatos");
 		});
 	}
 
 	public synchronized void actualizarValores(Map<Integer, ArrayList<Voto>> valores) {
 		valores.forEach((candidato, valor) -> {
-			dataset.setValue(valor.size(), candidato, candidato);
+			dataset.setValue(valor.size(), candidato, "Candidatos");
 		});
-		List<Integer> lista = new ArrayList<>(dataset.getColumnKeys());
+		List<Integer> lista = new ArrayList<>(dataset.getRowKeys());
 		lista.forEach((candidato) -> {
 			if (!valores.containsKey(candidato))
-				dataset.removeColumn(candidato);
+				dataset.removeRow(candidato);
 		});
+	}
+
+	public ChartFrame getV() {
+		return v;
 	}
 
 	public void mostrarGrafico(String titulo, String labelValores, String tipoGrafico) {
 		JFreeChart grafico;
 		switch (tipoGrafico) {
 			case "barras":
-				grafico = ChartFactory.createBarChart(titulo, categoria, labelValores, dataset);
+				grafico = ChartFactory.createBarChart(titulo, "Candidatos", labelValores, dataset);
 				break;
 			case "lineas":
-				grafico = ChartFactory.createLineChart(titulo, categoria, labelValores, dataset);
+				grafico = ChartFactory.createLineChart(titulo, "Candidatos", labelValores, dataset);
 				break;
 			case "pizza":
 			default:
-				grafico = ChartFactory.createPieChart(titulo, new CategoryToPieDataset(dataset, TableOrder.BY_ROW, 0));
+				grafico = ChartFactory.createPieChart(titulo, new CategoryToPieDataset(dataset, TableOrder.BY_COLUMN, 0));
 				break;
 		}
 		if (v == null) {
