@@ -6,11 +6,13 @@
 package progra_servidor.model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +26,9 @@ import progra_servidor.controller.ControladorDeGrafico;
 public class SistemaServidor {
 
 	private static Servidor servidor;
-	private static ArrayList<Candidato> candidatos;
+	private static ArrayList<Candidato> candidatos = new ArrayList<>();
 	private static Stv stv;
+	private static ArrayList<Integer> personasQueYaVotaron = new ArrayList<>();
 
 	public static void iniciarServidor() {
 		servidor = new Servidor(5000);
@@ -83,7 +86,9 @@ public class SistemaServidor {
 
 	private static void actualizarGrafico(ControladorDeGrafico grafico, boolean flag) {
 		if (stv.plazasLlenadas())
-			JOptionPane.showMessageDialog(grafico.getV().getChartPanel(), "Se ha terminado de evaluar los votos.", "Resultado de votación", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(grafico.getV().getChartPanel(),
+																		"Se ha terminado de evaluar los votos.",
+																		"Resultado de votación", JOptionPane.INFORMATION_MESSAGE);
 		else {
 			if (flag)
 				stv.eliminarPartidoConMenosVotos();
@@ -104,26 +109,38 @@ public class SistemaServidor {
 		}
 	}
 
-	public static void main(String[] args) {
-		Random r = new Random();
-		ArrayList<Voto> votos = new ArrayList<>(1000);
-		Voto voto;
-		int k;
-		for (int i = 0; i < 1000; i++) {
-			voto = new Voto();
-			for (int j = 0; j < r.nextInt(15); j++) {
-				k = r.nextInt(15);
-				if (!voto.contains(k))
-					voto.add(k);
+	public static boolean puedeVotar(int cedula) {
+		if (personasQueYaVotaron.contains(cedula))
+			return false;
+		try (RandomAccessFile raf = new RandomAccessFile(new File(ClassLoader.getSystemClassLoader().getResource("progra_servidor/model/CA.txt").toURI()), "r")) {
+			int largoDeLinea = 121,
+				inicio = 0,
+				fin = (int) (raf.length() / largoDeLinea),
+				mitad,
+				resultadoComparacion;
+			byte[] lineBuffer = new byte[largoDeLinea];
+			while (inicio <= fin) {
+				mitad = (inicio + fin) / 2;
+				raf.seek(mitad * largoDeLinea); // jump to this line in the file
+				raf.read(lineBuffer); // read the line from the file
+				String line = new String(lineBuffer); // convert the line to a String
+
+				resultadoComparacion = Integer.parseInt(line.split(",")[0]) - cedula;
+				if (resultadoComparacion == 0)
+					return true;
+				else if (resultadoComparacion < 0)
+					inicio = mitad + 1;
+				else
+					fin = mitad - 1;
 			}
-			votos.add(voto);
+		} catch (IOException ex) {
+		} catch (URISyntaxException ex) {
 		}
-		try {
-			stv = new Stv(votos, 5);
-			mostrarResultadoDeLaVotacion("pizza");
-		} catch (Exception ex) {
-			Logger.getLogger(SistemaServidor.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		return false;
+	}
+
+	public static void main(String[] args) {
+		puedeVotar(109720432);
 	}
 
 }
