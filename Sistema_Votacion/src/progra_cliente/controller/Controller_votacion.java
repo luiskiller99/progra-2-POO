@@ -39,10 +39,11 @@ public class Controller_votacion implements Initializable {
     private ObservableList<Integer> items;    
     @Override public void initialize(URL url, ResourceBundle rb) {
         items = FXCollections.observableArrayList();      
-        items.addAll(1,2,3);
+        items.addAll(0,1,2,3);
         agregar_candidato("luis");
         agregar_candidato("carlos");
-        agregar_candidato("andres");
+        agregar_candidato("andres");        
+        
     }    
     @FXML private void enviar_voto(ActionEvent event) {
         for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size() ; i++) {
@@ -56,7 +57,7 @@ public class Controller_votacion implements Initializable {
             }
             if(cont>1){
                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tiene selecciones iguales en dos o mas candidatos, corríjalas", ButtonType.OK);
-                 //alert.show();
+                 alert.show();
             }else{
                 //enviar voto
             }            
