@@ -39,10 +39,29 @@ public class Controller_votacion implements Initializable {
     private ObservableList<Integer> items;    
     @Override public void initialize(URL url, ResourceBundle rb) {
         items = FXCollections.observableArrayList();      
-        items.addAll(1,2,3);
+        items.addAll(0,1,2,3);
         agregar_candidato("luis");
         agregar_candidato("carlos");
         agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        agregar_candidato("luis");
+        agregar_candidato("carlos");
+        agregar_candidato("andres");
+        
     }    
     @FXML private void enviar_voto(ActionEvent event) {
         for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size() ; i++) {
