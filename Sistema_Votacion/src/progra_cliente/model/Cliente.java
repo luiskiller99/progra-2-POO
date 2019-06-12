@@ -7,7 +7,7 @@ import java.io.*;
 public class Cliente extends Thread {
 
 	final String Host = "127.0.0.1";
-	final int port = 5002;
+	final int port = 5000;
 	DataInputStream in;
 	DataOutputStream out;
 	String Nombre = "";

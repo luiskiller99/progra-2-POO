@@ -20,7 +20,7 @@ public final class Stv {
 	private final ArrayList<Voto> votos;
 	private final int plazas;
 	private final int CANT_PARA_PLAZA;
-	private Map<Integer, ArrayList<Voto>> votosPorCandidato;
+	Map<Integer, ArrayList<Voto>> votosPorCandidato;
 
 	public Stv(ArrayList<Voto> todosLosVotos, int plazasPorLlenar) throws Exception {
 		if (todosLosVotos.size() < plazasPorLlenar)
@@ -44,11 +44,12 @@ public final class Stv {
 
 	private Map<Integer, ArrayList<Voto>> contarVotos(ArrayList<Voto> votos) {
 		Map<Integer, ArrayList<Voto>> votosContados = new HashMap<>();
-		for (Voto voto : votos)
-			if (voto.siguiente() != 0) {
-				votosContados.putIfAbsent(voto.siguiente(), new ArrayList<>());
-				votosContados.get(voto.siguiente()).add(voto);
-			}
+		for (Voto voto : votos) {
+			while (voto.siguiente() != 0 && !votosPorCandidato.containsKey(voto.siguiente()))
+				voto.modificarActual();
+			if (voto.siguiente() != 0)
+				votosContados.putIfAbsent(voto.siguiente(), new ArrayList<>()).add(voto);
+		}
 		return votosContados;
 	}
 
@@ -105,7 +106,7 @@ public final class Stv {
 	}
 
 	public boolean plazasLlenadas() {
-		return (votosPorCandidato.entrySet().size() == plazas);
+		return (votosPorCandidato.size() == plazas);
 	}
 
 	public void algoritmoCompleto() {

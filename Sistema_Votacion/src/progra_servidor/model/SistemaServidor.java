@@ -6,13 +6,16 @@
 package progra_servidor.model;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import progra_servidor.controller.ControladorDeGrafico;
 
 /**
  *
@@ -58,8 +61,66 @@ public class SistemaServidor {
 		servidor.cerrar_connecion();
 	}
 
-	public static void mostrarResultadoDeLaVotacion() {
+	public static void mostrarResultadoDeLaVotacion(String tipoGrafico) {
+		stv.contarTodosLosVotos();
+		ControladorDeGrafico graficador = new ControladorDeGrafico(stv.votosPorCandidato, "Candidatos");
+		graficador.mostrarGrafico("Resultado de votacion", "Votos por candidato", tipoGrafico);
+		Timer t = new Timer();
+		t.schedule(
+			new java.util.TimerTask() {
+			@Override
+			public void run() {
+				actualizarGrafico(graficador, false);
+				t.cancel();
+			}
+		},
+			5000
+		);
+	}
 
+	private static void actualizarGrafico(ControladorDeGrafico grafico, boolean flag) {
+		if (stv.plazasLlenadas())
+			new Alert(Alert.AlertType.INFORMATION, "Se ha terminado de evaluar los votos.").showAndWait();
+		else {
+			if (flag)
+				stv.eliminarPartidoConMenosVotos();
+			else
+				stv.eliminarPartidoConMenosVotos();
+			grafico.actualizarValores(stv.votosPorCandidato);
+			Timer t = new java.util.Timer();
+			t.schedule(
+				new java.util.TimerTask() {
+				@Override
+				public void run() {
+					actualizarGrafico(grafico, flag != true);
+					t.cancel();
+				}
+			},
+				5000
+			);
+		}
+	}
+
+	public static void main(String[] args) {
+		Random r = new Random();
+		ArrayList<Voto> votos = new ArrayList<>(1000);
+		Voto voto;
+		int k;
+		for (int i = 0; i < 1000; i++) {
+			voto = new Voto();
+			for (int j = 0; j < r.nextInt(15); j++) {
+				k = r.nextInt(15);
+				if (!voto.contains(k))
+					voto.add(k);
+			}
+			votos.add(voto);
+		}
+		try {
+			stv = new Stv(votos, 5);
+			mostrarResultadoDeLaVotacion("barras");
+		} catch (Exception ex) {
+			Logger.getLogger(SistemaServidor.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 }
