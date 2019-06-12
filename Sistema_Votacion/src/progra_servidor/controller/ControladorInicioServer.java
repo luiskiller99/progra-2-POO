@@ -40,8 +40,8 @@ public class ControladorInicioServer implements Initializable {
 
     @FXML
     private void abrirVentanaAniadirCandidato(ActionEvent event) {
-        //Stage stagg = (Stage) botonAniadirCandidato.getScene().getWindow();
-	//stagg.close();
+        Stage stagg = (Stage) botonAniadirCandidato.getScene().getWindow();
+	stagg.close();
         try {
                 FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaAniadirCandidatos.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
@@ -56,16 +56,16 @@ public class ControladorInicioServer implements Initializable {
     @FXML
     private void abrirVentanaServidorIniciado(ActionEvent event) {
         Stage stagg = (Stage) botonIniciarVotacion.getScene().getWindow();
-		stagg.close();
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaServidorIniciado.fxml"));
-			Parent root = (Parent) fxmlLoader.load();
-			Stage stage = new Stage();
-			stage.setScene(new Scene(root));
-			stage.show();
-		} catch (IOException e) {
-                    
-		}
+        stagg.close();
+        try {
+                FXMLLoader fxmlLoader = new FXMLLoader(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaServidorIniciado.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+        } catch (IOException e) {
+
+        }
     }
     
 }
