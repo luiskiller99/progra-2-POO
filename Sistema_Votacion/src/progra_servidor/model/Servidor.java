@@ -4,48 +4,51 @@ import java.io.*;
 import java.util.ArrayList;
 import progra_cliente.model.Renglon_votacion;
 public class Servidor extends Thread {	
-	private ServerSocket server;	
-        private Socket socket;
-	private int port = 5000;
+	private ServerSocket server;
+        private Socket socket = null;
+        private ObjectOutputStream out;
+        private ObjectInputStream in;
+        
+        private DataOutputStream outd;
+        private DataInputStream ind;
+        
+        private final int puerto = 9999;
 	public Servidor() {}
         @Override
-	public void run() {            
-                try {
-                    server = new ServerSocket(port);
-                    socket = server.accept();
-                } catch (ConnectException e) {System.out.println("error conección");
-		} catch (IOException e) {System.out.println("error");}
-                //leer_votos();          
-                ArrayList<Renglon_votacion> v = new ArrayList<Renglon_votacion>();
-                v.add(new Renglon_votacion("luis",3));
-                enviar_candidatos(v);
-        }                        
-        public void enviar_candidatos(ArrayList<Renglon_votacion> v){            
+	public void run() {           
             try{
-                ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
-                objectOutput.writeObject(v); 
-                System.out.println("envio datos con exito");
-            } catch (IOException e){e.printStackTrace();}
+                server = new ServerSocket(puerto);                
+                System.out.println("Server: Esperando Conexion");            
+                socket = server.accept();
+                System.out.println("Server: Conectado");                                                                                                                                                            
+            }catch (IOException e){System.out.println("Server: Error conexión");}                
+        } 
+        //terminada
+        public void enviar_candidatos(ArrayList<String> v){            
+            try{                                
+                for(int i=0;i<v.size();i++){
+                    outd = new DataOutputStream(socket.getOutputStream());                    
+                    outd.writeBoolean(true);                    
+                    outd.writeUTF(v.get(i));                     
+                    System.out.println("Server: envio candidato");
+                }
+                outd.writeBoolean(false);
+            } catch (IOException e){System.out.println("error envio");}
         }
         public ArrayList<Renglon_votacion> leer_votos(){
-           ArrayList<Renglon_votacion> titleList = new ArrayList<Renglon_votacion>();
+           ArrayList<Renglon_votacion> votos = new ArrayList<>();           
            try {
-               while(true){
-                    ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
-                    try {
-                        Object object = objectInput.readObject();
-                        titleList =  (ArrayList<Renglon_votacion>) object;
-                        System.out.println(titleList.get(0).getNombre_de_candidato());
-                    } catch (ClassNotFoundException e) {
-                        System.out.println("The title list has not come from the server");
-                        e.printStackTrace();
-                    }
+               ind = new DataInputStream(socket.getInputStream());
+               boolean t=true;               
+               while(t){
+                    if(!ind.readBoolean())break;
+                    ind = new DataInputStream(socket.getInputStream());
+                    String candidato = ind.readUTF();            
+                    int pos  = ind.readInt();
+                    votos.add(new Renglon_votacion(candidato,pos));                    
                }
-           } catch (IOException e) {
-               System.out.println("The socket for reading the object has problem");
-               e.printStackTrace();
-           }
-           return titleList;
+           } catch (IOException e) {System.out.println("error conectando para leer");}
+           return votos;
         }
         public void cerrar_conección() {
 		try {

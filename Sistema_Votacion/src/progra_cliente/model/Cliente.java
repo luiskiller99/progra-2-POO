@@ -1,47 +1,52 @@
 package progra_cliente.model;
 
-//import javax.swing.*;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 
 public class Cliente extends Thread {
 	final String Host = "127.0.0.1";
-	final int port = 5000;	
-	Socket socket = null;        
+	final int port = 9999;	
+	Socket socket = null;  
+        ObjectInputStream in;
+        ObjectOutputStream out;
+        
+        DataInputStream ind;
+        DataOutputStream outd;
+    
 	public Cliente() {}
         @Override
-	public void run() {            
-                try {socket = new Socket(Host, port);                
-                } catch (ConnectException e) {System.out.println("error conección");
-		} catch (IOException e) {System.out.println("error");}
-                leer_candidatos();          
+	public void run() {                
+            try {
+                socket = new Socket(Host, port);                                                                           
+            } catch (IOException e) {System.out.println("Cliente error io");}                                   
         }                        
         public void enviar_votos(ArrayList<Renglon_votacion> v){            
             try{
-                ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
-                objectOutput.writeObject(v); 
-            } catch (IOException e){e.printStackTrace();}
+                //primero nombres
+                for(int i=0;i<v.size();i++){
+                    outd = new DataOutputStream(socket.getOutputStream());                    
+                    outd.writeBoolean(true);                    
+                    outd.writeUTF(v.get(i).getNombre_de_candidato());                                                            
+                    outd = new DataOutputStream(socket.getOutputStream());                                        
+                    outd.writeInt(v.get(i).getPos());                                         
+                }   
+                outd.writeBoolean(false);
+            } catch (IOException e){System.out.println("error enviar");;}
         }
-        public ArrayList<Renglon_votacion> leer_candidatos(){
-           ArrayList<Renglon_votacion> titleList = new ArrayList<Renglon_votacion>();
+        public ArrayList<String> leer_candidatos(){
+           ArrayList<String> candidatos = new ArrayList<String>();           
            try {
-               while(true){
-                    ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
-                    try {
-                        Object object = objectInput.readObject();
-                        titleList =  (ArrayList<Renglon_votacion>) object;
-                        System.out.println(titleList.get(0).Nombre_de_candidato);
-                    } catch (ClassNotFoundException e) {
-                        System.out.println("The title list has not come from the server");
-                        e.printStackTrace();
-                    }
-               }
-           } catch (IOException e) {
-               System.out.println("The socket for reading the object has problem");
-               e.printStackTrace();
-           }
-           return titleList;
+               ind = new DataInputStream(socket.getInputStream());
+               boolean t = true;
+               while(t){
+                    if(!ind.readBoolean())break;
+                    ind = new DataInputStream(socket.getInputStream());                    
+                    String candidato = ind.readUTF();                         
+                    candidatos.add(candidato);                    
+                }   
+           } catch (IOException e) {System.out.println("error io");}
+           return candidatos;
         }
         public void cerrar_conección() {
 		try {
