@@ -12,7 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import progra_servidor.model.SistemaServidor;
 
 /**
@@ -43,7 +46,28 @@ public class ControladorVentanaAniadirCandidatos implements Initializable {
 
     @FXML
     private void agregarCandidato(ActionEvent event) {
-        SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), Integer.parseInt(textCedula.getText()));
+        if(!isTextOnly(textNombreCandidato.getText())){
+            JOptionPane.showMessageDialog(null, "Nombre del candidato no valido", "Error", 0);
+            textNombreCandidato.clear();
+            return;
+        }
+        if(!isTextOnly(textPartidoPolitico.getText())){
+            JOptionPane.showMessageDialog(null, "Nombre del Partido politico no valido", "Error", 0);
+            textPartidoPolitico.clear();
+            return;
+        }
+        if(!isNumbersOnly(textCedula.getText())){
+            JOptionPane.showMessageDialog(null, "Cedula no valida", "Error", 0);
+            textCedula.clear();
+            return;
+        }
+        int cedula=Integer.parseInt(textCedula.getText());
+        if(cedula>1000000000||cedula<99999999){
+            JOptionPane.showMessageDialog(null, "Cedula no valida", "Error", 0);
+            textCedula.clear();
+            return;
+        }
+        SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), cedula);
         textNombreCandidato.clear();
         textPartidoPolitico.clear();
         textCedula.clear();
@@ -54,6 +78,15 @@ public class ControladorVentanaAniadirCandidatos implements Initializable {
     private void cerrarVentana(ActionEvent event) {
         Stage stagg = (Stage) botonCerrarVentana.getScene().getWindow();
 	stagg.close();
+    }
+
+    private boolean isTextOnly(String s){
+        String regrex = "[A-Za-z\\s]+";
+        return s.matches(regrex);
+    }
+    private boolean isNumbersOnly(String s){
+        String regrex="[0-9]";
+        return s.matches(regrex);
     }
     
 }
