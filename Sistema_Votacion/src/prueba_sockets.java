@@ -44,7 +44,7 @@ public class prueba_sockets extends Application {
         
         Button btns1 = new Button();
         btns1.setText("servidor enviar candidatos"); 
-        btns1.setTranslateX(0);
+        btns1.setTranslateX(0); 
         btns1.setTranslateY(50);       
         
         Button btns2 = new Button();
