@@ -11,21 +11,17 @@ public class Servidor extends Thread {
 	private Socket socket = null;
 	private DataOutputStream outd;
 	private DataInputStream ind;
-
 	private final int puerto = 9999;
-
-	public Servidor() {
-	}
-
+	public Servidor() {}
 	@Override
 	public void run() {
 		try {
-			server = new ServerSocket(puerto);
-			System.out.println("Server: Esperando Conexion");
-			socket = server.accept();
-			System.out.println("Server: Conectado");
+                    server = new ServerSocket(puerto);                                           
+                    System.out.println("Server: Esperando Conexion");
+                    socket = server.accept();                            
+                    System.out.println("Server: Cliente Conectado");
 		} catch (IOException e) {
-			System.out.println("Server: Error conexión");
+			System.out.println("Server: Error conexión -> "+e.getMessage());
 		}
 	}
 	//terminada

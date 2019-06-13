@@ -4,8 +4,8 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Cliente extends Thread {
-	final String Host = "172.18.18.77";//"127.0.0.1";
+public class Cliente extends Thread {//ip publica   //ip local
+	final String Host = "192.168.56.1";//"192.168.56.1";//"201.191.254.54";//"127.0.0.1";
 	final int port = 9999;	
 	Socket socket = null;         
         

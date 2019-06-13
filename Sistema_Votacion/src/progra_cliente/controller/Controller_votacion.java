@@ -40,9 +40,9 @@ public class Controller_votacion implements Initializable {
     @Override public void initialize(URL url, ResourceBundle rb) {
         items = FXCollections.observableArrayList();      
         items.addAll(0,1,2,3);
-        agregar_candidato("luis");
-        agregar_candidato("carlos");
-        agregar_candidato("andres");        
+        agregar_candidato("luis",234324,"PLN");
+        agregar_candidato("carlos",234324,"PAC");
+        agregar_candidato("andres",234324,"CACA");        
         
     }    
     @FXML private void enviar_voto(ActionEvent event) {
@@ -62,10 +62,9 @@ public class Controller_votacion implements Initializable {
                 //enviar voto
             }            
         }
-    }    
-    @FXML private void enviar_en_blanco(ActionEvent event) {}
-    private void agregar_candidato(String nombre_candidato){
-        Label n = new Label(nombre_candidato);          
+    }        
+    private void agregar_candidato(String nombre_candidato,int cedula,String partido){
+        Label n = new Label("\t"+nombre_candidato+"\t"+cedula+"\t"+partido);          
         n.setMinSize(300, 14);    
         n.setPrefSize(300, 14);                
         ComboBox<Integer> num = new ComboBox(items);
@@ -95,5 +94,6 @@ public class Controller_votacion implements Initializable {
             }
         }
         return renglon;
-    }
+    }    
+    @FXML private void enviar_en_blanco(ActionEvent event) {}
 }

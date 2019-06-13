@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="274.0" prefWidth="439.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progra_cliente.controller.Controller_ventana_ingresar_cliente">
+<AnchorPane id="AnchorPane" prefHeight="274.0" prefWidth="439.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progra_cliente.controller.Controller_ventana_ingresar_cliente">
    <children>
       <Label layoutX="14.0" layoutY="61.0" text="INGRESE SU CÉDULA Y CONTRASEÑA PARA EMPERZAR CON LA VOTACIÓN" />
       <TextField fx:id="ced" layoutX="141.0" layoutY="115.0" promptText="Cédula" />
