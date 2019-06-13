@@ -25,24 +25,24 @@ import progra_servidor.model.SistemaServidor;
  */
 public class ControladorVentanaAniadirCandidatos implements Initializable {
 
-    @FXML
-    private TextField textNombreCandidato;
-    @FXML
-    private TextField textPartidoPolitico;
-    @FXML
-    private TextField textCedula;
-    @FXML
-    private Button botonAniadirCandidato;
-    @FXML
-    private Button botonCerrarVentana;
+	@FXML
+	private TextField textNombreCandidato;
+	@FXML
+	private TextField textPartidoPolitico;
+	@FXML
+	private TextField textCedula;
+	@FXML
+	private Button botonAniadirCandidato;
+	@FXML
+	private Button botonCerrarVentana;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+	/**
+	 * Initializes the controller class.
+	 */
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		// TODO
+	}
 
     @FXML
     private void agregarCandidato(ActionEvent event) {
