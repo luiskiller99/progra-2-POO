@@ -7,6 +7,8 @@ package progra_servidor.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -67,7 +69,11 @@ public class ControladorVentanaAniadirCandidatos implements Initializable {
             textCedula.clear();
             return;
         }
-        SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), cedula);
+        try {
+            SistemaServidor.aniadirCandidato(textNombreCandidato.getText(), textPartidoPolitico.getText(), cedula);
+        } catch (Exception ex) {
+            Logger.getLogger(ControladorVentanaAniadirCandidatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
         textNombreCandidato.clear();
         textPartidoPolitico.clear();
         textCedula.clear();
