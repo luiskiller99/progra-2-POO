@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Cliente extends Thread {
-	final String Host = "127.0.0.1";
+	final String Host = "172.18.18.77";//"127.0.0.1";
 	final int port = 9999;	
 	Socket socket = null;         
         
