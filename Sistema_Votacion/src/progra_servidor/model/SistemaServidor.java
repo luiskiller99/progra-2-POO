@@ -31,7 +31,7 @@ public class SistemaServidor {
 	private static ArrayList<Integer> personasQueYaVotaron = new ArrayList<>();
 
 	public static void iniciarServidor() {
-		servidor = new Servidor(5000);
+		//servidor = new Servidor(5000);
 	}
 
 	public static boolean haySuficientesCandidatosRegistrados() {
@@ -64,7 +64,6 @@ public class SistemaServidor {
 	}
 
 	public static void cerrarServidor() {
-		servidor.cerrar_connecion();
 	}
 
 	public static void mostrarResultadoDeLaVotacion(String tipoGrafico) {
