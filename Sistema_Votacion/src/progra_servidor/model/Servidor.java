@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import progra_cliente.model.Renglon_votacion;
 public class Servidor extends Thread {	
 	private ServerSocket server;
+        private Socket socket = null;
+        private ObjectOutputStream out;
+        private ObjectInputStream in;
+
         private Socket socket = null;        
         private DataOutputStream outd;
         private DataInputStream ind;
+
         private final int puerto = 9999;
 	public Servidor() {}
         @Override
@@ -31,27 +36,3 @@ public class Servidor extends Thread {
                 outd.writeBoolean(false);
             } catch (IOException e){System.out.println("error envio");}
         }
-        public ArrayList<Renglon_votacion> leer_votos(){
-           ArrayList<Renglon_votacion> votos = new ArrayList<>();           
-           try {
-               ind = new DataInputStream(socket.getInputStream());
-               boolean t=true;               
-               while(t){
-                    if(!ind.readBoolean())break;
-                    ind = new DataInputStream(socket.getInputStream());
-                    String candidato = ind.readUTF();            
-                    int pos  = ind.readInt();
-                    votos.add(new Renglon_votacion(candidato,pos));                    
-               }
-           } catch (IOException e) {System.out.println("error conectando para leer");}
-           return votos;
-        }
-        public void cerrar_conección() {
-		try {
-                    socket.close();
-                    System.out.println("Conección cerrada");
-		} catch (IOException R) {
-                    System.out.println("Error al cerrar conección");
-		}
-	}
-}
