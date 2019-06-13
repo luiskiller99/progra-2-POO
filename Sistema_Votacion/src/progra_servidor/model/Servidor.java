@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import progra_cliente.model.Renglon_votacion;
 public class Servidor extends Thread {	
 	private ServerSocket server;
-        private Socket socket = null;
-        private ObjectOutputStream out;
-        private ObjectInputStream in;
-        
+        private Socket socket = null;        
         private DataOutputStream outd;
         private DataInputStream ind;
-        
         private final int puerto = 9999;
 	public Servidor() {}
         @Override
