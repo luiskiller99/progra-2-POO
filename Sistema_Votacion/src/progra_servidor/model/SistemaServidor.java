@@ -30,8 +30,12 @@ public class SistemaServidor {
 	private static Stv stv;
 	private static ArrayList<Integer> personasQueYaVotaron = new ArrayList<>();
 
+	private SistemaServidor() {
+	}
+
 	public static void iniciarServidor() {
-		//servidor = new Servidor(5000);
+		servidor = new Servidor();
+		servidor.start();
 	}
 
 	public static boolean haySuficientesCandidatosRegistrados() {
@@ -47,7 +51,7 @@ public class SistemaServidor {
 
 	public static void guardarVoto(Voto voto) {
 		try (FileWriter f = new FileWriter("votos.db", true)) {
-			f.write('\n' + Encriptador.encrypt(ConversorDeObjetos.convertirAJsonString(voto)));
+			f.write(Encriptador.encrypt(ConversorDeObjetos.convertirAJsonString(voto)) + '\n');
 		} catch (IOException ex) {
 		}
 	}
@@ -125,9 +129,10 @@ public class SistemaServidor {
 				String line = new String(lineBuffer); // convert the line to a String
 
 				resultadoComparacion = Integer.parseInt(line.split(",")[0]) - cedula;
-				if (resultadoComparacion == 0)
+				if (resultadoComparacion == 0) {
+					personasQueYaVotaron.add(cedula);
 					return true;
-				else if (resultadoComparacion < 0)
+				} else if (resultadoComparacion < 0)
 					inicio = mitad + 1;
 				else
 					fin = mitad - 1;

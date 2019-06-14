@@ -31,8 +31,8 @@ public final class Stv {
 		CANT_PARA_PLAZA = votos.size() / (plazas + 1) + 1;
 	}
 
-	private void transferirVoto(Map<Integer, ArrayList<Voto>> votosPorSiguienteOpcion,
-															Integer candidatoAQuitarVoto, Integer candidatoAPonerVoto) {
+	private void transferirVoto(final Map<Integer, ArrayList<Voto>> votosPorSiguienteOpcion,
+															final Integer candidatoAQuitarVoto, final Integer candidatoAPonerVoto) {
 		Voto votoTransfiriendo = votosPorSiguienteOpcion.get(candidatoAPonerVoto).remove(0);
 		votosPorCandidato.get(candidatoAQuitarVoto)
 			.remove(votoTransfiriendo);
@@ -42,7 +42,7 @@ public final class Stv {
 				.add(votoTransfiriendo);
 	}
 
-	private Map<Integer, ArrayList<Voto>> contarVotos(ArrayList<Voto> votos) {
+	private Map<Integer, ArrayList<Voto>> contarVotos(final ArrayList<Voto> votos) {
 		Map<Integer, ArrayList<Voto>> votosContados = new HashMap<>();
 		for (Voto voto : votos) {
 			while (voto.siguiente() != 0 && !votosPorCandidato.containsKey(voto.siguiente()))
