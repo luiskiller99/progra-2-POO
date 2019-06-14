@@ -50,10 +50,7 @@ public class Controller_ventana_ingresar_cliente implements Initializable {
                     stage.setTitle("Votación");
                     stage.setScene(new Scene(fxmlloader.load()));
                     stage.show();
-                } catch (IOException e) 
-                {
-
-                }
+                } catch (IOException e){}
             } else {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Los datos no son válidos", ButtonType.OK);
                 alert.show();

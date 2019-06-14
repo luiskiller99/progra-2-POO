@@ -54,8 +54,7 @@ public class Controller_votacion implements Initializable {
         }
     }
 
-    @FXML
-    private void enviar_voto(ActionEvent event) {
+    @FXML private void enviar_voto(ActionEvent event) {
         int cont = 0;
         for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size(); i++) {
             HBox s = (HBox) vbox_arreglo_candidatos.getChildren().get(i);
@@ -78,10 +77,10 @@ public class Controller_votacion implements Initializable {
             cont = 0;
         }
         if (cont == 0) {
+            Modelo=new Cliente();
             Modelo.enviar_votos(obtener_votos());
         }
     }
-
     private void agregar_candidato(String nombre_candidato, int cedula, String partido) {
         Label n = new Label(cedula + "\t" + nombre_candidato + "\t" + partido);
         n.setMinSize(300, 14);
@@ -95,11 +94,7 @@ public class Controller_votacion implements Initializable {
         r.setPrefSize(416, 44);
         vbox_arreglo_candidatos.getChildren().add(r);
     }
-
-    private void agregar_elemento_combobox(int n) {
-        items.add(n);
-    }
-
+    private void agregar_elemento_combobox(int n) {items.add(n);}
     private Voto obtener_votos() {
         Voto votos = new Voto();
         for (int j = 1; j < items.size(); j++) {
@@ -109,7 +104,7 @@ public class Controller_votacion implements Initializable {
                 ComboBox<Integer> c = (ComboBox<Integer>) s.getChildren().get(1);
                 if (c.getValue() != null) {
                     if (c.getValue() == j) {
-                        String ced = ll.getText().substring(0, 5);
+                        String ced = ll.getText().substring(0, 9);
                         votos.add(Integer.parseInt(ced));
                         break;
                     }
@@ -118,8 +113,5 @@ public class Controller_votacion implements Initializable {
         }
         return votos;
     }
-
-    @FXML
-    private void enviar_en_blanco(ActionEvent event) {
-    }
+    @FXML private void salir_de_votacion(ActionEvent event) {Modelo.cerrar_conexion();}
 }

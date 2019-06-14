@@ -2,8 +2,6 @@ package progra_servidor.model;
 
 import java.net.*;
 import java.io.*;
-import java.util.ArrayList;
-import progra_cliente.model.Renglon_votacion;
 
 public class Servidor extends Thread {
 

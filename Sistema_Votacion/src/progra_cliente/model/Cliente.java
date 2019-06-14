@@ -15,7 +15,7 @@ public class Cliente extends Thread {
     //server PC luiskiller99
     final String Host = "192.168.43.13";
     final int port = 9999;
-    Socket socket = null;
+    static Socket socket = null;
     DataInputStream ind;
     DataOutputStream outd;
     public static ArrayList<Candidato> candidatos;
@@ -44,7 +44,6 @@ public class Cliente extends Thread {
         } else {
             return false;
         }
-
     }
 
     @Override
@@ -62,6 +61,7 @@ public class Cliente extends Thread {
                 outd = new DataOutputStream(socket.getOutputStream());
                 outd.writeBoolean(true);
                 outd.writeInt(v.get(i));
+                System.out.println("mando voto: "+v.get(i));
             }
             outd.writeBoolean(false);
         } catch (IOException e) {

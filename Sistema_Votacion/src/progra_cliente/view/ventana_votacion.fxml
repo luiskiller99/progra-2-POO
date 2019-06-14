@@ -14,7 +14,7 @@
          </content>
       </ScrollPane>
       <Button layoutX="-50.0" layoutY="355.0" mnemonicParsing="false" onAction="#enviar_voto" text="Enviar voto" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="355.0" />
-      <Button layoutX="-40.0" layoutY="365.0" mnemonicParsing="false" onAction="#enviar_en_blanco" text="Salir de la votación" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="355.0" />
+      <Button layoutX="-40.0" layoutY="365.0" mnemonicParsing="false" onAction="#salir_de_votacion" text="Salir de la votación" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="355.0" />
       <Label layoutX="14.0" layoutY="14.0" text="Cédula    Nombre    Partido" />
    </children>
 </AnchorPane>
