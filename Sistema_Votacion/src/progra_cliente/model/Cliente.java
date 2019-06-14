@@ -57,8 +57,7 @@ public class Cliente extends Thread {
     }
 
     public void enviar_votos(Voto v) {
-        try {
-            //primero nombres
+        try {            
             for (int i = 0; i < v.size(); i++) {
                 outd = new DataOutputStream(socket.getOutputStream());
                 outd.writeBoolean(true);
