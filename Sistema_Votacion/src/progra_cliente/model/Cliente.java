@@ -13,7 +13,7 @@ import progra_servidor.model.Voto;
 public class Cliente extends Thread {
 
     //server PC luiskiller99
-    final String Host = "192.168.43.13";
+    final String Host = "192.168.43.67";
     final int port = 9999;
     static Socket socket = null;
     DataInputStream ind;
@@ -56,12 +56,18 @@ public class Cliente extends Thread {
     }
 
     public void enviar_votos(Voto v) {
-        try {            
-            for (int i = 0; i < v.size(); i++) {
+        try {   
+            if(v.size()<1){
                 outd = new DataOutputStream(socket.getOutputStream());
                 outd.writeBoolean(true);
-                outd.writeInt(v.get(i));
-                System.out.println("mando voto: "+v.get(i));
+                outd.writeInt(-1);
+            }else{
+                    for (int i = 0; i < v.size(); i++) {
+                    outd = new DataOutputStream(socket.getOutputStream());
+                    outd.writeBoolean(true);
+                    outd.writeInt(v.get(i));
+                    System.out.println("mando voto: "+v.get(i));
+                }
             }
             outd.writeBoolean(false);
         } catch (IOException e) {
