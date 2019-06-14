@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import progra_servidor.model.Voto;
 /** 
  * @author Luis Elizondo
  */
@@ -40,31 +41,34 @@ public class Controller_votacion implements Initializable {
     @Override public void initialize(URL url, ResourceBundle rb) {
         items = FXCollections.observableArrayList();      
         items.addAll(0,1,2,3);
-        agregar_candidato("luis",234324,"PLN");
-        agregar_candidato("carlos",234324,"PAC");
-        agregar_candidato("andres",234324,"CACA");        
+        agregar_candidato("luis",12345,"PLN");
+        agregar_candidato("carlos",23456,"PAC");
+        agregar_candidato("andres",34567,"CACA");        
         
     }    
     @FXML private void enviar_voto(ActionEvent event) {
-        for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size() ; i++) {
-            int cont=0;
+        int cont=0;
+        for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size() ; i++) {            
             HBox s = (HBox) vbox_arreglo_candidatos.getChildren().get(i); 
             ComboBox<Integer> c = (ComboBox<Integer>) s.getChildren().get(1);                           
             for (int j = 0; j < vbox_arreglo_candidatos.getChildren().size(); j++) {                
                 HBox ss = (HBox) vbox_arreglo_candidatos.getChildren().get(j); 
                 ComboBox<Integer> cc = (ComboBox<Integer>) ss.getChildren().get(1);                           
-                if(c.getValue() == cc.getValue())cont++;
+                if(c.getValue()!=null && cc.getValue()!=null){
+                    int c1 = c.getValue(),cc1 = cc.getValue();
+                    if((c1 == cc1)&& (c1 != 0)  ) cont++;
+                }
             }
-            if(cont>1){
+            if(cont>=2){
                  Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tiene selecciones iguales en dos o mas candidatos, corríjalas", ButtonType.OK);
                  alert.show();
-            }else{
-                //enviar voto
-            }            
+            }else{}
+            cont=0;
         }
+        if(cont==0)obtener_votos();
     }        
     private void agregar_candidato(String nombre_candidato,int cedula,String partido){
-        Label n = new Label("\t"+nombre_candidato+"\t"+cedula+"\t"+partido);          
+        Label n = new Label(cedula+"\t"+nombre_candidato+"\t"+partido);          
         n.setMinSize(300, 14);    
         n.setPrefSize(300, 14);                
         ComboBox<Integer> num = new ComboBox(items);
@@ -77,23 +81,23 @@ public class Controller_votacion implements Initializable {
         vbox_arreglo_candidatos.getChildren().add(r);        
     }
     private void agregar_elemento_combobox(int n){items.add(n);}
-    private ArrayList<Renglon_votacion> obtener_votos(){
-        ArrayList<Renglon_votacion> renglon = new ArrayList<>();
-        for(int i = 0 ; i < vbox_arreglo_candidatos.getChildren().size() ; i++ ){
-            HBox s = (HBox) vbox_arreglo_candidatos.getChildren().get(i); 
-            Label ll = (Label) s.getChildren().get(0);            
-            ComboBox<Integer> c = (ComboBox<Integer>) s.getChildren().get(1);                
-            if(c.getValue()!=null){
-                Renglon_votacion ff = new Renglon_votacion(ll.getText(), c.getValue());
-                renglon.add(ff);
+    private Voto obtener_votos(){
+        Voto votos = new Voto();        
+        for(int j=1;j<items.size();j++){            
+            for(int i = 0 ; i < vbox_arreglo_candidatos.getChildren().size() ; i++ ){
+                HBox s = (HBox) vbox_arreglo_candidatos.getChildren().get(i); 
+                Label ll = (Label) s.getChildren().get(0);            
+                ComboBox<Integer> c = (ComboBox<Integer>) s.getChildren().get(1);                
+                if(c.getValue()!=null){
+                    if(c.getValue()==j){
+                        String ced = ll.getText().substring(0, 5);                           
+                        votos.add(Integer.parseInt(ced));
+                        break;
+                    }                    
+                }
             }
-            else{
-                //-1 hace referencia a espacios en blanco
-                Renglon_votacion ff = new Renglon_votacion(ll.getText(), -1);
-                renglon.add(ff);
-            }
-        }
-        return renglon;
+        }        
+        return votos;
     }    
     @FXML private void enviar_en_blanco(ActionEvent event) {}
 }

@@ -53,7 +53,7 @@ public class Cliente extends Thread {
            } catch (IOException e) {System.out.println("error io");}
            return candidatos;
         }
-    public void cerrar_conección() {
+    public void cerrar_conexion() {
 		try {
                     socket.close();
                     System.out.println("Conección cerrada");
