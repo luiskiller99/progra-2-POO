@@ -26,7 +26,7 @@ import progra_servidor.controller.ControladorDeGrafico;
 public class SistemaServidor {
 
 	private static Servidor servidor;
-	private static ArrayList<Candidato> candidatos = new ArrayList<>();
+	public static ArrayList<Candidato> candidatos = new ArrayList<>();
 	private static Stv stv;
 	private static ArrayList<Integer> personasQueYaVotaron = new ArrayList<>();
 

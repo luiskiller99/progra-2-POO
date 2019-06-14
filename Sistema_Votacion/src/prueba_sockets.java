@@ -16,6 +16,7 @@ import progra_cliente.model.Cliente;
 import progra_cliente.model.Renglon_votacion;
 import progra_servidor.model.Candidato;
 import progra_servidor.model.Servidor;
+import progra_servidor.model.SistemaServidor;
 
 /**
  *
@@ -54,8 +55,14 @@ public class prueba_sockets extends Application {
         btns2.setTranslateY(100);       
         
         Servidor server=new Servidor();
-        Cliente cliente=new Cliente();
-        
+        Cliente cliente = new Cliente(100842638);
+        ArrayList<Candidato> a= new ArrayList<>();
+        a.add(new Candidato("carlos","PLN",4534));
+        a.add(new Candidato("luis","PLN",4534));
+        a.add(new Candidato("roxana","PLN",4534));
+        a.add(new Candidato("eugenio","PLN",4534));
+        SistemaServidor.candidatos = a;
+        /*
         btns.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
             public void handle(ActionEvent event) {server.start();}
@@ -67,12 +74,7 @@ public class prueba_sockets extends Application {
         btns1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
             public void handle(ActionEvent event) {
-                ArrayList<Candidato> a= new ArrayList<>();
-                a.add(new Candidato("carlos","PLN",4534));
-                a.add(new Candidato("luis","PLN",4534));
-                a.add(new Candidato("roxana","PLN",4534));
-                a.add(new Candidato("eugenio","PLN",4534));
-                server.enviar_candidatos(a);
+                server.enviar_candidatos();
             }
         });
         btnc1.setOnAction(new EventHandler<ActionEvent>() {            
@@ -104,7 +106,7 @@ public class prueba_sockets extends Application {
                 cliente.enviar_votos(v);
             }
         });
-        
+        */
         StackPane root = new StackPane();
         root.getChildren().add(btns);
         root.getChildren().add(btnc);

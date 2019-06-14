@@ -12,22 +12,31 @@ public class Servidor extends Thread {
     public Servidor() {}
     @Override public void run() {
 	try {
-            server = new ServerSocket(puerto);                                           
-            System.out.println("Server: Esperando Conexion");
-            socket = server.accept();                            
-            System.out.println("Server: Cliente Conectado");
+            server = new ServerSocket(puerto);               
+            while(true){
+                System.out.println("Server: Esperando Conexion");            
+                socket = server.accept();   
+                ind = new DataInputStream(socket.getInputStream());                
+                int ced = ind.readInt();
+                boolean d = SistemaServidor.puedeVotar(ced);
+                outd = new DataOutputStream(socket.getOutputStream());                
+                outd.writeBoolean(d); 
+                //outd.writeBoolean(false); 
+                if(d){enviar_candidatos();}
+                System.out.println("Server: Cliente Conectado");
+            }
 	} catch (IOException e) {
             System.out.println("Server: Error conexión -> "+e.getMessage());
 	}
     }
-    public void enviar_candidatos(ArrayList<Candidato> v) {
+    public void enviar_candidatos() {
 	try {
-            for (int i = 0; i < v.size(); i++) {
+            for (int i = 0; i < SistemaServidor.candidatos.size(); i++) {
 		outd = new DataOutputStream(socket.getOutputStream());
 		outd.writeBoolean(true);//no permite que  ciclo en cliente termine
-		outd.writeUTF(v.get(i).getNombre());//envia nombre
-                outd.writeUTF(v.get(i).getPartido());//envia Partido
-                outd.writeInt(v.get(i).getCedula());//envia cedula
+		outd.writeUTF(SistemaServidor.candidatos.get(i).getNombre());//envia nombre
+                outd.writeUTF(SistemaServidor.candidatos.get(i).getPartido());//envia Partido
+                outd.writeInt(SistemaServidor.candidatos.get(i).getCedula());//envia cedula
 		System.out.println("Server: envio candidato");
             }
             outd.writeBoolean(false);//termina ciclo en cliente
@@ -35,17 +44,16 @@ public class Servidor extends Thread {
             System.out.println("error envio");
 	}
     }
-    public ArrayList<Renglon_votacion> leer_votos() {
-	ArrayList<Renglon_votacion> votos = new ArrayList<>();
+    public Voto leer_votos() {
+	Voto votos = new Voto();
 	try {
             ind = new DataInputStream(socket.getInputStream());
             boolean t = true;
             while (t) {
 		if (!ind.readBoolean()) break;
-		ind = new DataInputStream(socket.getInputStream());
-		String candidato = ind.readUTF();
+		ind = new DataInputStream(socket.getInputStream());		
 		int pos = ind.readInt();
-		votos.add(new Renglon_votacion(candidato, pos));
+		votos.add(pos);
             }
 	} catch (IOException e) {
             System.out.println("error conectando para leer");
