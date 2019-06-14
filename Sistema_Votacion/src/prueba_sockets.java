@@ -55,7 +55,7 @@ public class prueba_sockets extends Application {
         btns2.setTranslateY(100);       
         
         Servidor server=new Servidor();
-        Cliente cliente = new Cliente(100842638);
+        //Cliente cliente = new Cliente(100842638);
         ArrayList<Candidato> a= new ArrayList<>();
         a.add(new Candidato("carlos","PLN",4534));
         a.add(new Candidato("luis","PLN",4534));
