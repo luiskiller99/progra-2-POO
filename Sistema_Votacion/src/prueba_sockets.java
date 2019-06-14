@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import progra_cliente.model.Cliente;
 import progra_cliente.model.Renglon_votacion;
+import progra_servidor.model.Candidato;
 import progra_servidor.model.Servidor;
 
 /**
@@ -66,20 +67,20 @@ public class prueba_sockets extends Application {
         btns1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
             public void handle(ActionEvent event) {
-                ArrayList<String> a= new ArrayList<>();
-                a.add("carlos");
-                a.add("luis");
-                a.add("daniel");
-                a.add("sharina");    
+                ArrayList<Candidato> a= new ArrayList<>();
+                a.add(new Candidato("carlos","PLN",4534));
+                a.add(new Candidato("luis","PLN",4534));
+                a.add(new Candidato("roxana","PLN",4534));
+                a.add(new Candidato("eugenio","PLN",4534));
                 server.enviar_candidatos(a);
             }
         });
         btnc1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
             public void handle(ActionEvent event) {
-                ArrayList<String> candidatos = cliente.leer_candidatos();
+                ArrayList<Candidato> candidatos = cliente.leer_candidatos();
                 for(int i=0;i<candidatos.size();i++){
-                    System.out.println("Cliente: lee candidato -> "+candidatos.get(i));
+                    System.out.println("Cliente: lee candidato -> "+candidatos.get(i).getNombre());
                 }
             }
         });

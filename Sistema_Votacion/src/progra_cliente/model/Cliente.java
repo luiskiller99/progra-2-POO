@@ -3,6 +3,7 @@ package progra_cliente.model;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import progra_servidor.model.Candidato;
 
 public class Cliente extends Thread {//ip publica   //ip local
 	final String Host = "192.168.56.1";//"192.168.56.1";//"201.191.254.54";//"127.0.0.1";
@@ -15,9 +16,8 @@ public class Cliente extends Thread {//ip publica   //ip local
 	public Cliente() {}
         @Override
 	public void run() {                
-            try {
-                socket = new Socket(Host, port);                                                                           
-            } catch (IOException e) {System.out.println("Cliente error io");}                                   
+            try {socket = new Socket(Host, port);                                                                           
+            } catch (IOException e) {System.out.println("Cliente: error -> "+e.toString());}                                   
         }                        
         public void enviar_votos(ArrayList<Renglon_votacion> v){            
             try{
@@ -32,16 +32,18 @@ public class Cliente extends Thread {//ip publica   //ip local
                 outd.writeBoolean(false);
             } catch (IOException e){System.out.println("error enviar");;}
         }
-        public ArrayList<String> leer_candidatos(){
-           ArrayList<String> candidatos = new ArrayList<String>();           
+        public ArrayList<Candidato> leer_candidatos(){
+           ArrayList<Candidato> candidatos = new ArrayList<>();           
            try {
                ind = new DataInputStream(socket.getInputStream());
                boolean t = true;
                while(t){
-                    if(!ind.readBoolean())break;
+                    if(!ind.readBoolean())break;//si para de leer
                     ind = new DataInputStream(socket.getInputStream());                    
-                    String candidato = ind.readUTF();                         
-                    candidatos.add(candidato);                    
+                    String nombre = ind.readUTF();//lee nombre
+                    String partido = ind.readUTF();//lee partido
+                    int cedula = ind.readInt();//lee cedula
+                    candidatos.add(new Candidato(nombre,partido,cedula));                    
                 }   
            } catch (IOException e) {System.out.println("error io");}
            return candidatos;
