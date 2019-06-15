@@ -68,6 +68,19 @@ public class Controller_votacion implements Initializable {
                 } else {
                     JOptionPane.showMessageDialog(null, "Ha pasado su tiempo maximo de votación", "Información", JOptionPane.INFORMATION_MESSAGE);
                     temporizador.cancel();
+                    Modelo = new Cliente();
+                    Modelo.cerrar_conexion();
+                    Stage s = (Stage) vbox_arreglo_candidatos.getScene().getWindow();
+                    s.close();
+                    try {
+                        URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
+                        FXMLLoader fxmlloader = new FXMLLoader(fxml);
+                        Stage stage = new Stage();
+                        stage.setTitle("Votación");
+                        stage.setScene(new Scene(fxmlloader.load()));
+                        stage.show();
+                    } catch (IOException e) {
+                    }
                 }
             }
 
