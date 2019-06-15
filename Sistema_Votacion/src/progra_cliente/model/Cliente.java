@@ -13,7 +13,7 @@ import progra_servidor.model.Voto;
 public class Cliente extends Thread {
 
     //server PC luiskiller99
-    final String Host = "192.168.43.67";
+    final String Host = "192.168.43.13";
     final int port = 9999;
     static Socket socket = null;
     DataInputStream ind;
