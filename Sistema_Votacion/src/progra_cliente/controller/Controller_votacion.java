@@ -54,32 +54,35 @@ public class Controller_votacion implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         
+
         temporizador = new Timer();
-        
+
         temporizador.schedule(new TimerTask() {
-            int s=0;
+            int s = 0;
+
             @Override
             public void run() {
-                s+=30;
-                if(s!=120){
-                    JOptionPane.showMessageDialog(null, "Ha pasado "+s+" segundos", "Información",JOptionPane.INFORMATION_MESSAGE);                                        
-                }else{                    
-                    JOptionPane.showMessageDialog(null, "Ha pasado su tiempo maximo de votación", "Información",JOptionPane.INFORMATION_MESSAGE);                    
-                    temporizador.cancel();}                
+                s += 30;
+                if (s != 120) {
+                    JOptionPane.showMessageDialog(null, "Ha pasado " + s + " segundos", "Información", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ha pasado su tiempo maximo de votación", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    temporizador.cancel();
+                }
             }
-            
-        } , 30000);
-        
+
+        }, 30000);
+
         items = FXCollections.observableArrayList();
-        int j=0;
-        for(Candidato i:Cliente.candidatos){
+        int j = 0;
+        for (Candidato i : Cliente.candidatos) {
             agregar_candidato(i.getNombre(), i.getCedula(), i.getPartido());
             items.add(j++);
         }
     }
 
-    @FXML private void enviar_voto(ActionEvent event) {
+    @FXML
+    private void enviar_voto(ActionEvent event) {
         int cont = 0;
         for (int i = 0; i < vbox_arreglo_candidatos.getChildren().size(); i++) {
             HBox s = (HBox) vbox_arreglo_candidatos.getChildren().get(i);
@@ -96,31 +99,35 @@ public class Controller_votacion implements Initializable {
             }
             if (cont >= 2) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tiene selecciones iguales en dos o mas candidatos, corríjalas", ButtonType.OK);
-                alert.show();
+                alert.showAndWait();
+                break;
             } else {
-            }
             cont = 0;
+            }
         }
         if (cont == 0) {
             // envia voto cierra ventana
-            Modelo=new Cliente();
+            Modelo = new Cliente();
             Modelo.enviar_votos(obtener_votos());
-            Modelo.cerrar_conexion();                                         
-            Stage s =(Stage) vbox_arreglo_candidatos.getScene().getWindow();
+            temporizador.cancel();
+            Modelo.cerrar_conexion();
+            Stage s = (Stage) vbox_arreglo_candidatos.getScene().getWindow();
             s.close();
             try {
-                    URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
-                    FXMLLoader fxmlloader = new FXMLLoader(fxml);
-                    Stage stage = new Stage();
-                    stage.setTitle("Votación");
-                    stage.setScene(new Scene(fxmlloader.load()));
-                    stage.show();                                        
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Su voto ha sido enviado con éxito", ButtonType.OK);
-                    alert.show();       
-                } catch (IOException e){}
-            
+                URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
+                FXMLLoader fxmlloader = new FXMLLoader(fxml);
+                Stage stage = new Stage();
+                stage.setTitle("Votación");
+                stage.setScene(new Scene(fxmlloader.load()));
+                stage.show();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Su voto ha sido enviado con éxito", ButtonType.OK);
+                alert.show();
+            } catch (IOException e) {
+            }
+
         }
     }
+
     private void agregar_candidato(String nombre_candidato, int cedula, String partido) {
         Label n = new Label(cedula + "\t" + nombre_candidato + "\t" + partido);
         n.setMinSize(300, 14);
@@ -134,7 +141,11 @@ public class Controller_votacion implements Initializable {
         r.setPrefSize(416, 44);
         vbox_arreglo_candidatos.getChildren().add(r);
     }
-    private void agregar_elemento_combobox(int n) {items.add(n);}
+
+    private void agregar_elemento_combobox(int n) {
+        items.add(n);
+    }
+
     private Voto obtener_votos() {
         Voto votos = new Voto();
         for (int j = 1; j < items.size(); j++) {
@@ -153,25 +164,28 @@ public class Controller_votacion implements Initializable {
         }
         return votos;
     }
-    @FXML private void salir_de_votacion(ActionEvent event) {       
-            int r = JOptionPane.showConfirmDialog(null, "Realmente desea salir, al confirmar enviaria un voto en blanco?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if(r == JOptionPane.YES_OPTION){
-                Modelo = new Cliente();
-                Voto v = new Voto();
-                Modelo.enviar_votos(v);
-                Modelo.cerrar_conexion();                                            
-                Stage s =(Stage) vbox_arreglo_candidatos.getScene().getWindow();
-                s.close();            
-                try {
-                        URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
-                        FXMLLoader fxmlloader = new FXMLLoader(fxml);
-                        Stage stage = new Stage();
-                        stage.setTitle("Votación");
-                        stage.setScene(new Scene(fxmlloader.load()));
-                        stage.show();        
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Su voto ha sido enviado con éxito", ButtonType.OK);
-                        alert.show();
-                    } catch (IOException e){}
+
+    @FXML
+    private void salir_de_votacion(ActionEvent event) {
+        int r = JOptionPane.showConfirmDialog(null, "Realmente desea salir, al confirmar enviaria un voto en blanco?", "Confirmar salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (r == JOptionPane.YES_OPTION) {
+            Modelo = new Cliente();
+            Voto v = new Voto();
+            Modelo.enviar_votos(v);
+            Modelo.cerrar_conexion();
+            Stage s = (Stage) vbox_arreglo_candidatos.getScene().getWindow();
+            s.close();
+            try {
+                URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_ingresar_cliente.fxml");
+                FXMLLoader fxmlloader = new FXMLLoader(fxml);
+                Stage stage = new Stage();
+                stage.setTitle("Votación");
+                stage.setScene(new Scene(fxmlloader.load()));
+                stage.show();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Su voto ha sido enviado con éxito", ButtonType.OK);
+                alert.show();
+            } catch (IOException e) {
             }
-    }            
+        }
+    }
 }
