@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import progra_cliente.model.Cliente;
@@ -21,7 +22,8 @@ public class Controller_ventana_ingresar_cliente implements Initializable {
 
 	private Cliente Modelo;
 
-	@FXML private TextField ced, con;
+	@FXML private TextField ced;
+	@FXML private PasswordField con;
 
 	@Override public void initialize(URL url, ResourceBundle rb) {
 	}
