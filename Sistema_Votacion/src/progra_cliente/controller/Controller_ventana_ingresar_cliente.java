@@ -19,46 +19,48 @@ import progra_cliente.model.Cliente;
  */
 public class Controller_ventana_ingresar_cliente implements Initializable {
 
-    private Cliente Modelo;
-    
-    @FXML private TextField ced, con;
+	private Cliente Modelo;
 
-    @Override public void initialize(URL url, ResourceBundle rb) {
-    }
+	@FXML private TextField ced, con;
 
-    String getCedula() {
-        return ced.getText();
-    }
+	@Override public void initialize(URL url, ResourceBundle rb) {
+	}
 
-    String getContrasena() {
-        return con.getText();
-    }
+	String getCedula() {
+		return ced.getText();
+	}
 
-    @FXML private void ingresar() {        
-        Modelo = new Cliente();
-        Modelo.run();
-        try {
-            if (Modelo.ValidarCredenciales(Integer.parseInt(getCedula()), Integer.parseInt(getContrasena()))) {
-                try {
-                    URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_votacion.fxml");
-                    FXMLLoader fxmlloader = new FXMLLoader(fxml);
-                    Stage stage = new Stage();
-                    stage.setTitle("Votación");
-                    stage.setScene(new Scene(fxmlloader.load()));
-                    stage.show();
-                    Stage s =(Stage) ced.getScene().getWindow();
-                    s.close();
-                } catch (IOException e){}
-            } else {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Los datos no son válidos", ButtonType.OK);
-                alert.show();
-            }
-        } catch (NumberFormatException N) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Los datos no son válidos", ButtonType.OK);
-            alert.show();
-        } catch (IOException ex) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Error al conectarse con servidor", ButtonType.OK);
-            alert.show();
-        }     
-    }
+	String getContrasena() {
+		return con.getText();
+	}
+
+	@FXML private void ingresar() {
+		Modelo = new Cliente();
+		Modelo.run();
+		try {
+			if (Modelo.ValidarCredenciales(Integer.parseInt(getCedula()), Integer.parseInt(getContrasena())))
+				try {
+					Modelo.enviarVotosGuardados();
+					URL fxml = getClass().getClassLoader().getResource("progra_cliente/view/ventana_votacion.fxml");
+					FXMLLoader fxmlloader = new FXMLLoader(fxml);
+					Stage stage = new Stage();
+					stage.setTitle("Votación");
+					stage.setScene(new Scene(fxmlloader.load()));
+					stage.show();
+					Stage s = (Stage) ced.getScene().getWindow();
+					s.close();
+				} catch (IOException e) {
+				}
+			else {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Los datos no son válidos", ButtonType.OK);
+				alert.show();
+			}
+		} catch (NumberFormatException N) {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Los datos no son válidos", ButtonType.OK);
+			alert.show();
+		} catch (IOException ex) {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Error al conectarse con servidor", ButtonType.OK);
+			alert.show();
+		}
+	}
 }

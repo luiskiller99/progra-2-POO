@@ -2,6 +2,8 @@ package progra_servidor.model;
 
 import java.net.*;
 import java.io.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Servidor extends Thread {
 
@@ -55,25 +57,34 @@ public class Servidor extends Thread {
 
 	public Voto leer_votos(final Socket s) {
 		System.out.println("Escuchando Votos!");
-		Voto votos = new Voto();
+		Voto votos;
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Thread.currentThread().interrupt();
+				t.cancel();
+			}
+		}, 2500);
 		try {
 			ind = new DataInputStream(s.getInputStream());
-			boolean t = true;
-			while (t) {
-				System.out.println("Esperando que alguien mande un true");
-				if (!ind.readBoolean()) break;
-				System.out.println("Recivió un voto!");
-				ind = new DataInputStream(s.getInputStream());
-				int pos = ind.readInt();
-				if (pos != -1)
-					votos.add(pos);
+			while (true) {
+				votos = new Voto();
+				while (true) {
+					System.out.println("Esperando que alguien mande un true");
+					if (!ind.readBoolean()) break;
+					System.out.println("Recibió un voto!");
+					ind = new DataInputStream(s.getInputStream());
+					int pos = ind.readInt();
+					if (pos != -1)
+						votos.add(pos);
+				}
+				SistemaServidor.guardarVoto(votos);
 			}
 		} catch (IOException e) {
 			System.out.println("error conectando para leer");
 		}
-		SistemaServidor.guardarVoto(votos);
-		Thread.currentThread().interrupt();
-		return votos;
+		return null;
 	}
 
 	public void cerrar_conección() {
