@@ -76,8 +76,12 @@ public class SistemaServidor {
 	public static void cerrarServidor() {
 	}
 
-	public static void mostrarResultadoDeLaVotacion(String tipoGrafico) {
+	public static boolean puedeEmpezarElConteoFinal() {
 		stv.contarTodosLosVotos();
+		return stv.votosPorCandidato.keySet().size() > 5;
+	}
+
+	public static void mostrarResultadoDeLaVotacion(String tipoGrafico) {
 		ControladorDeGrafico graficador = new ControladorDeGrafico(stv.votosPorCandidato, "Candidatos");
 		graficador.mostrarGrafico("Resultado de votacion", "Votos por candidato", tipoGrafico);
 		Timer t = new Timer();
@@ -94,11 +98,18 @@ public class SistemaServidor {
 	}
 
 	private static void actualizarGrafico(ControladorDeGrafico grafico, boolean flag) {
-		if (stv.plazasLlenadas())
+		if (stv.plazasLlenadas()) {
 			JOptionPane.showMessageDialog(grafico.getV().getChartPanel(),
 																		"Se ha terminado de evaluar los votos.",
 																		"Resultado de votación", JOptionPane.INFORMATION_MESSAGE);
-		else {
+			File f = new File("key.sk");
+			f.delete();
+			f = new File("personasQueYaVotaron.db");
+			f.delete();
+			f = new File("votos.db");
+			f.delete();
+
+		} else {
 			if (flag)
 				stv.eliminarPartidoConMenosVotos();
 			else

@@ -42,7 +42,7 @@ public class Sistema_Votacion extends Application {
 																										new Candidato("Esteban", "PAC", 123412331),
 																										new Candidato("Esteban", "PAC", 123412341),
 																										new Candidato("Esteban", "PAC", 123412351),
-																										new Candidato("Esteban", "PAC", 123412351)));
+																										new Candidato("Esteban", "PAC", 123412352)));
 		try {
 			Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader().getResource("progra_servidor/view/VentanaInicioServer.fxml"));
 			scene = new Scene(root);
