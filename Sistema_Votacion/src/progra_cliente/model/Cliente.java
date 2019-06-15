@@ -109,6 +109,7 @@ public class Cliente {
 				.useDelimiter("\\A").next().split("\n");
 			for (String i : s)
 				enviar_votos(ConversorDeObjetos.convertirAObjeto(Encriptador.decrypt(i), Voto.class));
+			new File("BackupVotos.db").delete();
 		} catch (FileNotFoundException ex) {
 		}
 	}
