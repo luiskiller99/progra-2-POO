@@ -43,10 +43,13 @@ public class ControladorVentanaServidorIniciado implements Initializable {
 			JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
 			try {
 				SistemaServidor.inicializarConteoDeVotos();
-				((Stage) botonTerminarVotacion.getScene().getWindow()).close();
-				SistemaServidor.cerrarServidor();
-				JOptionPane.showMessageDialog(null, "Iniciando conteo de votos", "Aviso", 1);
-				SistemaServidor.mostrarResultadoDeLaVotacion("");
+				if (SistemaServidor.puedeEmpezarElConteoFinal()) {
+					((Stage) botonTerminarVotacion.getScene().getWindow()).close();
+					SistemaServidor.cerrarServidor();
+					JOptionPane.showMessageDialog(null, "Iniciando conteo de votos", "Aviso", 1);
+					SistemaServidor.mostrarResultadoDeLaVotacion("");
+				} else
+					JOptionPane.showMessageDialog(null, "No se puede iniciar la votación ya que no se ha votado por suficientes candidatos.", "Error", 0);
 			} catch (Exception ex) {
 				new Alert(Alert.AlertType.ERROR, "No se han recibido suficientes votos para terminar la votación.").showAndWait();
 			}
