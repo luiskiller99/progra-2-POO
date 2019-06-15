@@ -5,17 +5,23 @@
  */
 package progra_servidor.model;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
 import javax.swing.JOptionPane;
 import progra_servidor.controller.ControladorDeGrafico;
 
@@ -28,7 +34,6 @@ public class SistemaServidor {
 	private static Servidor servidor;
 	public static ArrayList<Candidato> candidatos = new ArrayList<>();
 	private static Stv stv;
-	private static ArrayList<Integer> personasQueYaVotaron = new ArrayList<>();
 
 	private SistemaServidor() {
 	}
@@ -51,7 +56,8 @@ public class SistemaServidor {
 
 	public static void guardarVoto(Voto voto) {
 		try (FileWriter f = new FileWriter("votos.db", true)) {
-			f.write(Encriptador.encrypt(ConversorDeObjetos.convertirAJsonString(voto)) + '\n');
+			String stringAGuardar = Encriptador.encrypt(ConversorDeObjetos.convertirAJsonString(voto)) + '\n';
+			f.write(stringAGuardar);
 		} catch (IOException ex) {
 		}
 	}
@@ -112,8 +118,28 @@ public class SistemaServidor {
 		}
 	}
 
+	private static boolean estaEnPersonasQueYaVotaron(int cedula) {
+		try {
+			ArrayList<String> r = new ArrayList<>(Arrays.asList(new Scanner(new File("personasQueYaVotaron.db"))
+				.useDelimiter("\\A").next().split(",")));
+			return r.stream().anyMatch((s) -> s == null ? false
+																				: "".equals(s) ? false
+																					: Integer.parseInt(Encriptador.decrypt(s)) == cedula);
+		} catch (FileNotFoundException ex) {
+			return false;
+		}
+	}
+
+	private static void aniadirAPersonasQueYaVotaron(int cedula) {
+		try (FileWriter f = new FileWriter("personasQueYaVotaron.db", true)) {
+			f.write(Encriptador.encrypt(Integer.toString(cedula)) + ',');
+			f.close();
+		} catch (Exception ex1) {
+		}
+	}
+
 	public static boolean puedeVotar(int cedula) {
-		if (personasQueYaVotaron.contains(cedula))
+		if (estaEnPersonasQueYaVotaron(cedula))
 			return false;
 		try (RandomAccessFile raf = new RandomAccessFile(new File(ClassLoader.getSystemClassLoader().getResource("progra_servidor/model/CA.txt").toURI()), "r")) {
 			int largoDeLinea = 121,
@@ -130,7 +156,7 @@ public class SistemaServidor {
 
 				resultadoComparacion = Integer.parseInt(line.split(",")[0]) - cedula;
 				if (resultadoComparacion == 0) {
-					personasQueYaVotaron.add(cedula);
+					aniadirAPersonasQueYaVotaron(cedula);
 					return true;
 				} else if (resultadoComparacion < 0)
 					inicio = mitad + 1;
@@ -142,9 +168,4 @@ public class SistemaServidor {
 		}
 		return false;
 	}
-
-	public static void main(String[] args) {
-		puedeVotar(109720432);
-	}
-
 }

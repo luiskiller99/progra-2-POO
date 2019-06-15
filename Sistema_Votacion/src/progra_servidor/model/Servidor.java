@@ -26,8 +26,11 @@ public class Servidor extends Thread {
 				outd = new DataOutputStream(socket.getOutputStream());
 				outd.writeBoolean(d);
 				//outd.writeBoolean(false); 
-				if (d) enviar_candidatos();
-				System.out.println("Server: Cliente Conectado");
+				if (d) {
+					enviar_candidatos();
+					System.out.println("Server: Cliente Conectado");
+					new Thread(() -> leer_votos(socket)).start();
+				} else System.out.println("Un mae mamó la contraseña");
 			}
 		} catch (IOException e) {
 			System.out.println("Server: Error conexión -> " + e.getMessage());
@@ -50,20 +53,26 @@ public class Servidor extends Thread {
 		}
 	}
 
-	public Voto leer_votos() {
+	public Voto leer_votos(final Socket s) {
+		System.out.println("Escuchando Votos!");
 		Voto votos = new Voto();
 		try {
-			ind = new DataInputStream(socket.getInputStream());
+			ind = new DataInputStream(s.getInputStream());
 			boolean t = true;
 			while (t) {
+				System.out.println("Esperando que alguien mande un true");
 				if (!ind.readBoolean()) break;
-				ind = new DataInputStream(socket.getInputStream());
+				System.out.println("Recivió un voto!");
+				ind = new DataInputStream(s.getInputStream());
 				int pos = ind.readInt();
-				votos.add(pos);
+				if (pos != -1)
+					votos.add(pos);
 			}
 		} catch (IOException e) {
 			System.out.println("error conectando para leer");
 		}
+		SistemaServidor.guardarVoto(votos);
+		Thread.currentThread().interrupt();
 		return votos;
 	}
 

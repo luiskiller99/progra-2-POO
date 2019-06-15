@@ -12,9 +12,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.Scanner;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Encriptador {
 
@@ -42,12 +44,15 @@ public class Encriptador {
 
 	private static void initKey() throws NoSuchAlgorithmException {
 		try {
-			key = ConversorDeObjetos.convertirAObjeto(new Scanner(new File("key.sk"))
-				.useDelimiter("\\A").next(), SecretKey.class);
+			String input = new Scanner(new File("key.sk")).useDelimiter("\\A").next();
+			if ("".equals(input)) throw new IOException("Llave vacía.");
+			byte[] encoded = Base64.getDecoder().decode(input);
+			key = new SecretKeySpec(encoded, "DES");
 		} catch (IOException ex) {
 			key = KeyGenerator.getInstance("DES").generateKey();
 			try (FileWriter f = new FileWriter("key.sk")) {
-				f.write(ConversorDeObjetos.convertirAJsonString(key));
+				f.write(Base64.getEncoder().withoutPadding().encodeToString(key.getEncoded()));
+				f.close();
 			} catch (Exception ex1) {
 			}
 		}

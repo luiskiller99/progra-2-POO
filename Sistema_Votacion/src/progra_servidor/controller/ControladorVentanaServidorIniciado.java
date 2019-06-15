@@ -12,8 +12,10 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import progra_servidor.model.SistemaServidor;
 
 /**
@@ -36,13 +38,18 @@ public class ControladorVentanaServidorIniciado implements Initializable {
 
 	@FXML
 	private void finalizarVotacion(ActionEvent event) {
-		((Stage) botonTerminarVotacion.getScene().getWindow()).close();
-                SistemaServidor.cerrarServidor();
-            try {
-                SistemaServidor.inicializarConteoDeVotos();
-            } catch (Exception ex) {
-                Logger.getLogger(ControladorVentanaServidorIniciado.class.getName()).log(Level.SEVERE, null, ex);
-            }
+		if (JOptionPane.showConfirmDialog(
+			null, "¿Está seguro de que sea finalizar la votación?", "Confirmar", JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+			try {
+				SistemaServidor.inicializarConteoDeVotos();
+				((Stage) botonTerminarVotacion.getScene().getWindow()).close();
+				SistemaServidor.cerrarServidor();
+				JOptionPane.showMessageDialog(null, "Iniciando conteo de votos", "Aviso", 1);
+				SistemaServidor.mostrarResultadoDeLaVotacion("");
+			} catch (Exception ex) {
+				new Alert(Alert.AlertType.ERROR, "No se han recibido suficientes votos para terminar la votación.").showAndWait();
+			}
 	}
 
 }
